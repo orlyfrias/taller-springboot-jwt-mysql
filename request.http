@@ -1,0 +1,28 @@
+### 1. Registrar usuario (esperado: 201 Created)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password123"
+}
+
+### 2. Obtener token JWT (esperado: 200 OK - guarda el token automáticamente)
+POST http://localhost:8080/api/auth/token
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password123"
+}
+
+> {%
+    client.global.set("token", response.body.accessToken);
+%}
+
+### 3. Probar ruta protegida sin token (esperado: 401 Unauthorized)
+GET http://localhost:8080/api/secured
+
+### 4. Probar ruta protegida con el token JWT (esperado: 200 OK)
+GET http://localhost:8080/api/secured
+Authorization: Bearer {{token}}
